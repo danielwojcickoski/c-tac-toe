@@ -6,6 +6,16 @@
 /*---------------------------
   Variables and constants
 ---------------------------*/
+unsigned char victoryPatterns[8][3] = {
+    {0, 1, 2},
+    {0, 4, 8},
+    {0, 3, 6},
+    {1, 4, 7},
+    {2, 5, 8},
+    {2, 4, 6},
+    {3, 4, 5},
+    {6, 7, 8}
+  };
 
 /*---------------------------
   Functions
@@ -19,70 +29,94 @@ void gameInitVars() {
   gameState.playerSymbol[1] = 'O';
 }
 
-char convertNumberToValue(unsigned char house){
+char convertNumberToValue(unsigned char house, char newValue){
     switch (house){
       case 0:
+        if(newValue != ' '){
+          gameState.currentBoard[0][0] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[0][0];
         break;
 
       case 1:
+        if(newValue != ' '){
+          gameState.currentBoard[0][1] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[0][1];
         break;
 
       case 2:
+        if(newValue != ' '){
+          gameState.currentBoard[0][2] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[0][2];
         break;
 
       case 3:
+        if(newValue != ' '){
+          gameState.currentBoard[1][0] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[1][0];
         break;
 
       case 4:
+        if(newValue != ' '){
+          gameState.currentBoard[1][1] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[1][1];
         break;
         
       case 5:
+        if(newValue != ' '){
+          gameState.currentBoard[1][2] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[1][2];
         break;
 
       case 6:
+        if(newValue != ' '){
+          gameState.currentBoard[2][0] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[2][0];
         break;
 
       case 7:
+        if(newValue != ' '){
+          gameState.currentBoard[2][1] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[2][1];
         break;
 
       case 8:
+        if(newValue != ' '){
+          gameState.currentBoard[2][2] = newValue;
+          return ' ';
+        }
         return gameState.currentBoard[2][2];
         break;
     }
-    return ' ';
-  }
+  return ' ';
+}
 
 void verifyWinner(){
-  unsigned char victoryPatterns[8][3] = {
-    {0, 1, 2},
-    {0, 4, 8},
-    {0, 3, 6},
-    {1, 4, 7},
-    {2, 5, 8},
-    {2, 4, 6},
-    {3, 4, 5},
-    {6, 7, 8}
-  };
-
   if(gameState.currentTurn == 9){
     gameState.gameWinner = WINNER_TOE;
   }
 
   char compareValue[3] = {' '};
 
-  //Verify Winner X
   for (int count = 0; count < 8; count++){
-    compareValue[0] = convertNumberToValue(victoryPatterns[count][0]);
-    compareValue[1] = convertNumberToValue(victoryPatterns[count][1]);
-    compareValue[2] = convertNumberToValue(victoryPatterns[count][2]);
+    compareValue[0] = convertNumberToValue(victoryPatterns[count][0], ' ');
+    compareValue[1] = convertNumberToValue(victoryPatterns[count][1], ' ');
+    compareValue[2] = convertNumberToValue(victoryPatterns[count][2], ' ');
 
     if(compareValue[0] == 'X' &&
        compareValue[1] == 'X' &&
@@ -174,9 +208,6 @@ void gameAction(){
       return;
       break;
   }
-
-  gameState.currentPlayer = !gameState.currentPlayer;
-  gameState.currentTurn++;
 }
 
 void game(){
@@ -191,6 +222,8 @@ void game(){
       gameAction();
     }
 
+    gameState.currentPlayer = !gameState.currentPlayer;
+    gameState.currentTurn++;
     verifyWinner();
   }
   if(gameState.gameWinner != WINNER_ERROR)

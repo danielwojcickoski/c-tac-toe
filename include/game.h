@@ -5,6 +5,8 @@
 /*---------------------------
   Variables and Constants
 ---------------------------*/
+extern unsigned char victoryPatterns[8][3];
+
 typedef enum {
   GAME_PVP = 0,
   GAME_PVC,
@@ -31,4 +33,5 @@ type_gameState gameState;
 /*---------------------------
   Functions
 ---------------------------*/
+char convertNumberToValue(unsigned char house, char newValue);
 void game();

@@ -15,17 +15,17 @@ typedef enum {
 } enum_screens;
 
 typedef enum {
-  MENU_PLAY = 1,
+  MENU_FIRST_VALUE = 0,
+  MENU_PLAY,
   MENU_CONFIG,
   MENU_EXIT,
+  MENU_LAST_VALUE,
 } enum_menuState;
 
 typedef enum {
-  MENU_FIRST_VALUE = 0,
-  PLAY_PVP,
+  PLAY_PVP = 1,
   PLAY_PVC,
   PLAY_RETURN,
-  MENU_LAST_VALUE,
 } enum_playState;
 
 typedef struct{

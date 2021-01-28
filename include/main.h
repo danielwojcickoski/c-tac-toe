@@ -48,7 +48,6 @@ typedef enum {
 } enum_exitFlags;
 
 typedef struct{
-  enum_loadingFlags loadingFlag;
   enum_exitFlags exitFlag;
 } type_appState;
 type_appState appState;
