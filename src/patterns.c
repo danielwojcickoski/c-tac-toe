@@ -6,6 +6,7 @@
 /*---------------------------
   Variables and constants
 ---------------------------*/
+//[house][line|column]
 unsigned char housePatterns[9][2] = {
     {0, 0},
     {0, 1},
