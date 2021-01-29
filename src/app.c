@@ -63,12 +63,58 @@ void playScreenAction(){
       break;
 
     case PLAY_ONLINE:
-      setCurrentScreen(GAME_SCREEN);
-      game(GAME_ONLINE);
+      setCurrentScreen(ONLINE_SCREEN);
+      setCurrentScreenState(ONLINE_FIRST_VALUE + 1);
       break;
 
     case PLAY_RETURN:
       setCurrentScreen(MENU_SCREEN);
+      break;
+    
+    default:
+      setCurrentScreenState(PLAY_FIRST_VALUE + 1);
+      break;
+  }
+}
+
+void onlineScreenAction(){
+  switch (getCurrentScreenState()){
+    case ONLINE_SERVER:
+      setCurrentScreen(SERVER_SCREEN);
+      setCurrentScreenState(SERVER_FIRST_VALUE + 1);
+      break;
+
+    case ONLINE_CLIENT:
+      setCurrentScreen(CLIENT_SCREEN);
+      setCurrentScreenState(CLIENT_FIRST_VALUE + 1);
+      break;
+
+    case ONLINE_RETURN:
+      setCurrentScreen(PLAY_SCREEN);
+      break;
+    
+    default:
+      setCurrentScreenState(PLAY_FIRST_VALUE + 1);
+      break;
+  }
+}
+
+void serverScreenAction(){
+  switch (getCurrentScreenState()){
+    case SERVER_RETURN:
+      setCurrentScreen(ONLINE_SCREEN);
+      break;
+    
+    default:
+      setCurrentScreenState(PLAY_FIRST_VALUE + 1);
+      break;
+  }
+}
+
+void clientScreenAction(){
+  switch (getCurrentScreenState()){
+    case CLIENT_RETURN:
+      setCurrentScreen(ONLINE_SCREEN);
       break;
     
     default:
@@ -95,8 +141,19 @@ void handleMenuSelection(int selection){
       break;
 
     case WINNER_SCREEN:
-      configScreenAction();
       setCurrentScreen(PLAY_SCREEN);
+      break;
+
+    case ONLINE_SCREEN:
+      onlineScreenAction();
+      break;
+
+    case SERVER_SCREEN:
+      serverScreenAction();
+      break;
+
+    case CLIENT_SCREEN:
+      clientScreenAction();
       break;
 
     default:

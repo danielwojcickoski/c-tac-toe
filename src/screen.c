@@ -34,6 +34,18 @@ void setCurrentScreenState(int newValue) {
       screenState.playScreenState = newValue;
       break;
 
+    case ONLINE_SCREEN:
+      screenState.onlineScreenState = newValue;
+      break;
+
+    case SERVER_SCREEN:
+      screenState.serverScreenState = newValue;
+      break;
+
+    case CLIENT_SCREEN:
+      screenState.clientScreenState = newValue;
+      break;
+
     default:
       break;
   }
@@ -52,6 +64,17 @@ int getCurrentScreenState() {
     case PLAY_SCREEN:
       return screenState.playScreenState;
       break;
+
+    case ONLINE_SCREEN:
+      return screenState.onlineScreenState;
+      break;
+
+    case SERVER_SCREEN:
+      return screenState.serverScreenState;
+      break;
+
+    case CLIENT_SCREEN:
+      return screenState.clientScreenState;
 
     default:
       return 0;
@@ -73,6 +96,18 @@ int getCurrentScreenFirstvalue() {
       return PLAY_FIRST_VALUE;
       break;
 
+    case ONLINE_SCREEN:
+      return ONLINE_FIRST_VALUE;
+      break;
+
+    case SERVER_SCREEN:
+      return SERVER_FIRST_VALUE;
+      break;
+
+    case CLIENT_SCREEN:
+      return SERVER_FIRST_VALUE;
+      break;
+
     default:
       return 0;
       break;
@@ -91,6 +126,18 @@ int getCurrentScreenLastvalue() {
 
     case PLAY_SCREEN:
       return PLAY_LAST_VALUE;
+      break;
+
+    case ONLINE_SCREEN:
+      return ONLINE_LAST_VALUE;
+      break;
+
+    case SERVER_SCREEN:
+      return SERVER_LAST_VALUE;
+      break;
+
+    case CLIENT_SCREEN:
+      return SERVER_LAST_VALUE;
       break;
 
     default:
@@ -119,7 +166,6 @@ void setCursor(enum_cursorState cursorState){
 }
 
 void configScreenSize(){
-  //Discover screen info
   CONSOLE_SCREEN_BUFFER_INFO screenInfo = {0};
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screenInfo);
 
@@ -167,9 +213,9 @@ void printPlayScreen(){
   prints[4] = getCurrentScreenState() == PLAY_RETURN ? 1 : 0;
 
   printf("\n\n");
-  printf("%s%s PVP %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVP    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
-  printf("%s%s PVC %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVC    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
-  printf("%s%s CVC %s\n", genPreSpaces(calcPreSpaces(sizeof("    CVC    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
+  printf("%s%s PvP %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVP    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printf("%s%s PvC %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVC    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
+  printf("%s%s CvC %s\n", genPreSpaces(calcPreSpaces(sizeof("    CVC    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
   printf("%s%s Online %s\n", genPreSpaces(calcPreSpaces(sizeof("    Online    "))), prints[3] == 1 ? "-->" : "   ", prints[3] == 1 ? "<--" : "   ");
   printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[4] == 1 ? "-->" : "   ", prints[4] == 1 ? "<--" : "   ");
 }
@@ -202,6 +248,34 @@ void printWinnerScreen(){
   }
 }
 
+void printOnlineScreen(){
+  unsigned char prints[5] = {0};
+  prints[0] = getCurrentScreenState() == ONLINE_SERVER ? 1 : 0;
+  prints[1] = getCurrentScreenState() == ONLINE_CLIENT ? 1 : 0;
+  prints[2] = getCurrentScreenState() == ONLINE_RETURN ? 1 : 0;
+
+  printf("\n\n");
+  printf("%s%s Server %s\n", genPreSpaces(calcPreSpaces(sizeof("    SERVER    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printf("%s%s Client %s\n", genPreSpaces(calcPreSpaces(sizeof("    Client    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
+  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
+}
+
+void printServerScreen(){
+  unsigned char prints[1] = {0};
+  prints[0] = getCurrentScreenState() == SERVER_RETURN ? 1 : 0;
+
+  printf("\n\n");
+  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+}
+
+void printClientScreen(){
+  unsigned char prints[1] = {0};
+  prints[0] = getCurrentScreenState() == CLIENT_RETURN ? 1 : 0;
+
+  printf("\n\n");
+  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+}
+
 void printCurrentScreen() {
   configScreenSize();
 
@@ -225,6 +299,18 @@ void printCurrentScreen() {
 
     case WINNER_SCREEN:
       printWinnerScreen();
+      break;
+
+    case ONLINE_SCREEN:
+      printOnlineScreen();
+      break;
+
+    case SERVER_SCREEN:
+      printServerScreen();
+      break;
+
+    case CLIENT_SCREEN:
+      printClientScreen();
       break;
 
     default:
