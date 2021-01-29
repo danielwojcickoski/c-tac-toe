@@ -10,7 +10,6 @@ typedef struct{
   unsigned int textColor;
   unsigned char * playerName;
 } type_appConfigs;
-type_appConfigs appConfigs;
 
 /*---------------------------
   Functions

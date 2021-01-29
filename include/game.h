@@ -5,11 +5,12 @@
 /*---------------------------
   Variables and Constants
 ---------------------------*/
-extern unsigned char victoryPatterns[8][3];
+unsigned char victoryPatterns[8][3];
 
 typedef enum {
   GAME_PVP = 0,
   GAME_PVC,
+  GAME_ONLINE,
 } enum_gameType;
 
 typedef enum {
@@ -28,10 +29,8 @@ typedef struct{
   enum_gameType gameType;
   enum_gameWinner gameWinner;
 } type_gameState;
-type_gameState gameState;
 
 /*---------------------------
   Functions
 ---------------------------*/
-char convertNumberToValue(unsigned char house, char newValue);
 void game();

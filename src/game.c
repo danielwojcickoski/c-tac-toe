@@ -6,6 +6,7 @@
 /*---------------------------
   Variables and constants
 ---------------------------*/
+type_gameState gameState;
 unsigned char victoryPatterns[8][3] = {
     {0, 1, 2},
     {0, 4, 8},
@@ -20,13 +21,14 @@ unsigned char victoryPatterns[8][3] = {
 /*---------------------------
   Functions
 ---------------------------*/
-void gameInitVars() {
+void gameInitVars(enum_gameType gameType) {
   gameState.currentTurn = 0;
-  gameState.gameWinner = WINNER_NONE;
-  memset(gameState.currentBoard, ' ', sizeof(gameState.currentBoard));
   gameState.currentPlayer = rand() % 2;
   gameState.playerSymbol[0] = 'X';
   gameState.playerSymbol[1] = 'O';
+  memset(gameState.currentBoard, ' ', sizeof(gameState.currentBoard));
+  gameState.gameType = gameType;
+  gameState.gameWinner = WINNER_NONE;
 }
 
 char convertNumberToValue(unsigned char house, char newValue){
@@ -134,7 +136,7 @@ void verifyWinner(){
   }
 }
 
-void gameAction(){
+void playerAction(){
   int selection = getch();
 
   switch (selection){
@@ -208,26 +210,35 @@ void gameAction(){
       return;
       break;
   }
+
+  gameState.currentPlayer = !gameState.currentPlayer;
+  gameState.currentTurn++;
 }
 
-void game(){
-  gameInitVars();
+void game(enum_gameType gameType){
+  gameInitVars(gameType);
+  setGameSreenState(gameState);
+
   while(gameState.gameWinner == WINNER_NONE) {
     printCurrentScreen();
 
     if(gameState.gameType == GAME_PVC && gameState.currentPlayer == 1){
+      setAiGameState(gameState);
       aiAction();
+      gameState = getAiGameState();
+      gameState.currentPlayer = !gameState.currentPlayer;
+      gameState.currentTurn++;
     }
     else{
-      gameAction();
+      playerAction();
     }
 
-    gameState.currentPlayer = !gameState.currentPlayer;
-    gameState.currentTurn++;
     verifyWinner();
+    setGameSreenState(gameState);
   }
+
   if(gameState.gameWinner != WINNER_ERROR)
-    screenState.currentScreen = WINNER_SCREEN;
+    setCurrentScreen(WINNER_SCREEN);
   else
-    screenState.currentScreen = MENU_SCREEN;
+    setCurrentScreen(PLAY_SCREEN);
 }
