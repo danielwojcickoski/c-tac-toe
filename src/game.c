@@ -7,16 +7,6 @@
   Variables and constants
 ---------------------------*/
 type_gameState gameState;
-unsigned char victoryPatterns[8][3] = {
-    {0, 1, 2},
-    {0, 4, 8},
-    {0, 3, 6},
-    {1, 4, 7},
-    {2, 5, 8},
-    {2, 4, 6},
-    {3, 4, 5},
-    {6, 7, 8}
-  };
 
 /*---------------------------
   Functions
@@ -31,83 +21,6 @@ void gameInitVars(enum_gameType gameType) {
   gameState.gameWinner = WINNER_NONE;
 }
 
-char convertNumberToValue(unsigned char house, char newValue){
-    switch (house){
-      case 0:
-        if(newValue != ' '){
-          gameState.currentBoard[0][0] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[0][0];
-        break;
-
-      case 1:
-        if(newValue != ' '){
-          gameState.currentBoard[0][1] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[0][1];
-        break;
-
-      case 2:
-        if(newValue != ' '){
-          gameState.currentBoard[0][2] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[0][2];
-        break;
-
-      case 3:
-        if(newValue != ' '){
-          gameState.currentBoard[1][0] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[1][0];
-        break;
-
-      case 4:
-        if(newValue != ' '){
-          gameState.currentBoard[1][1] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[1][1];
-        break;
-        
-      case 5:
-        if(newValue != ' '){
-          gameState.currentBoard[1][2] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[1][2];
-        break;
-
-      case 6:
-        if(newValue != ' '){
-          gameState.currentBoard[2][0] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[2][0];
-        break;
-
-      case 7:
-        if(newValue != ' '){
-          gameState.currentBoard[2][1] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[2][1];
-        break;
-
-      case 8:
-        if(newValue != ' '){
-          gameState.currentBoard[2][2] = newValue;
-          return ' ';
-        }
-        return gameState.currentBoard[2][2];
-        break;
-    }
-  return ' ';
-}
-
 void verifyWinner(){
   if(gameState.currentTurn == 9){
     gameState.gameWinner = WINNER_TOE;
@@ -116,9 +29,9 @@ void verifyWinner(){
   char compareValue[3] = {' '};
 
   for (int count = 0; count < 8; count++){
-    compareValue[0] = convertNumberToValue(victoryPatterns[count][0], ' ');
-    compareValue[1] = convertNumberToValue(victoryPatterns[count][1], ' ');
-    compareValue[2] = convertNumberToValue(victoryPatterns[count][2], ' ');
+    compareValue[0] = gameState.currentBoard[getHouseByPattern(count, 0, LINE)][getHouseByPattern(count, 0, COLLUMN)];
+    compareValue[1] = gameState.currentBoard[getHouseByPattern(count, 1, LINE)][getHouseByPattern(count, 1, COLLUMN)];
+    compareValue[2] = gameState.currentBoard[getHouseByPattern(count, 2, LINE)][getHouseByPattern(count, 2, COLLUMN)];
 
     if(compareValue[0] == 'X' &&
        compareValue[1] == 'X' &&
@@ -143,71 +56,35 @@ void playerAction(){
     case KEY_ESC:
       gameState.gameWinner = WINNER_ERROR;
       break;
-    case KEY_NUM1:
-      if(gameState.currentBoard[2][0] == ' ')
-        gameState.currentBoard[2][0] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM2:
-      if(gameState.currentBoard[2][1] == ' ')
-        gameState.currentBoard[2][1] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM3:
-      if(gameState.currentBoard[2][2] == ' ')
-        gameState.currentBoard[2][2] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM4:
-      if(gameState.currentBoard[1][0] == ' ')
-        gameState.currentBoard[1][0] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM5:
-      if(gameState.currentBoard[1][1] == ' ')
-        gameState.currentBoard[1][1] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM6:
-      if(gameState.currentBoard[1][2] == ' ')
-        gameState.currentBoard[1][2] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM7:
-      if(gameState.currentBoard[0][0] == ' ')
-        gameState.currentBoard[0][0] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM8:
-      if(gameState.currentBoard[0][1] == ' ')
-        gameState.currentBoard[0][1] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
-
-    case KEY_NUM9:
-      if(gameState.currentBoard[0][2] == ' ')
-        gameState.currentBoard[0][2] = gameState.playerSymbol[gameState.currentPlayer];
-      else
-        return;
-      break;
 
     default:
-      return;
+      if(selection >= KEY_NUM1 && selection <= KEY_NUM9){
+        char newSymbol = gameState.playerSymbol[gameState.currentPlayer];
+
+        printf("%d ", selection);
+
+        if(selection >= KEY_NUM7 && selection <= KEY_NUM9)
+          selection -= 55;
+        else if(selection >= KEY_NUM4 && selection <= KEY_NUM6)
+          selection -= 49;
+        else if(selection >= KEY_NUM1 && selection <= KEY_NUM3)
+          selection -= 43;
+
+        unsigned char line = getHouseByNumber(selection, LINE);
+        unsigned char collumn = getHouseByNumber(selection, COLLUMN);
+
+        printf("%d\n", selection);
+
+        if(gameState.currentBoard[line][collumn] == ' '){
+          gameState.currentBoard[line][collumn] = newSymbol;
+        }
+        else{
+          return;
+        }
+      }
+      else {
+        return;
+      }
       break;
   }
 

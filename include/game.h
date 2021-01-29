@@ -5,8 +5,6 @@
 /*---------------------------
   Variables and Constants
 ---------------------------*/
-unsigned char victoryPatterns[8][3];
-
 typedef enum {
   GAME_PVP = 0,
   GAME_PVC,

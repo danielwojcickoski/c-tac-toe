@@ -11,6 +11,7 @@
 #include "./app.h"
 #include "./config.h"
 #include "./screen.h"
+#include "./patterns.h"
 
 /*---------------------------
   Variables and Constants

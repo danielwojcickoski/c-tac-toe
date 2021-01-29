@@ -19,99 +19,45 @@ type_gameState getAiGameState(){
   return gameAiState;
 }
 
-
-char aiConvertNumberToValue(unsigned char house, char newValue){
-    switch (house){
-      case 0:
-        if(newValue != ' '){
-          gameAiState.currentBoard[0][0] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[0][0];
-        break;
-
-      case 1:
-        if(newValue != ' '){
-          gameAiState.currentBoard[0][1] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[0][1];
-        break;
-
-      case 2:
-        if(newValue != ' '){
-          gameAiState.currentBoard[0][2] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[0][2];
-        break;
-
-      case 3:
-        if(newValue != ' '){
-          gameAiState.currentBoard[1][0] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[1][0];
-        break;
-
-      case 4:
-        if(newValue != ' '){
-          gameAiState.currentBoard[1][1] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[1][1];
-        break;
-        
-      case 5:
-        if(newValue != ' '){
-          gameAiState.currentBoard[1][2] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[1][2];
-        break;
-
-      case 6:
-        if(newValue != ' '){
-          gameAiState.currentBoard[2][0] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[2][0];
-        break;
-
-      case 7:
-        if(newValue != ' '){
-          gameAiState.currentBoard[2][1] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[2][1];
-        break;
-
-      case 8:
-        if(newValue != ' '){
-          gameAiState.currentBoard[2][2] = newValue;
-          return ' ';
-        }
-        return gameAiState.currentBoard[2][2];
-        break;
-    }
-  return ' ';
-}
-
 void aiAction(){
-  //Inpiração para a IA com um dificuldade maior Future use
-  //https://pt.quora.com/Existe-uma-maneira-de-nunca-perder-no-Jogo-da-Velha-ou-Jogo-do-Galo#:~:text=Fa%C3%A7a%20uma%20jogada%20no%20canto,jogo%20ir%C3%A1%20terminar%20em%20empate.
+  //modo muito facil
+    //Jogada 100% aleatoria
+
+  //modo facil
+    //Verifica se vai perder - joga em casa a fim de impedir oponente de finalizar o jogo
+    //Faz uma jogada aleatoria
+
+  //modo normal
+    //Verifica se vai ganhar
+    //Veifica se vai perder
+    //Faz jogada aleatoria
+
+  //modo dificil
+    //Verifica se vai ganhar
+    //Veifica se vai perder
+    //Joga no pattern onde tem mais peças suas
+    //Joga aleatoriamente
+
+  //modo muito dificil
+    //Inpiração para a IA com um dificuldade maior Future use
+    //https://pt.quora.com/Existe-uma-maneira-de-nunca-perder-no-Jogo-da-Velha-ou-Jogo-do-Galo#:~:text=Fa%C3%A7a%20uma%20jogada%20no%20canto,jogo%20ir%C3%A1%20terminar%20em%20empate.
+    //Faz as jogadas corretas para cada situação
+
 
   unsigned char bestOponnentPattern[2] = {0};//pattern, count
   unsigned char bestAiPattern[2] = {0};//pattern, count
+  int line = 0;
+  int collumn = 0;
+  char currentPlayerSymbol = gameAiState.playerSymbol[gameAiState.currentPlayer];
 
   //Verifica em qual pattern tem mais peças do oponente e em qual tem mais minhas
   //Salva o numero do pattern e o valor dele
   for (int count = 0; count < 8; count++){
     char compareValue[3] = {' '};
     int auxOponnent = 0, auxAi = 0;
-    compareValue[0] = aiConvertNumberToValue(victoryPatterns[count][0], ' ');
-    compareValue[1] = aiConvertNumberToValue(victoryPatterns[count][1], ' ');
-    compareValue[2] = aiConvertNumberToValue(victoryPatterns[count][2], ' ');
+    compareValue[0] = gameAiState.currentBoard[getHouseByPattern(count, 0, LINE)][getHouseByPattern(count, 0, COLLUMN)];
+    compareValue[1] = gameAiState.currentBoard[getHouseByPattern(count, 1, LINE)][getHouseByPattern(count, 1, COLLUMN)];
+    compareValue[2] = gameAiState.currentBoard[getHouseByPattern(count, 2, LINE)][getHouseByPattern(count, 2, COLLUMN)];
 
     if(compareValue[0] == gameAiState.playerSymbol[gameAiState.currentPlayer]){
       auxAi++;
@@ -148,22 +94,24 @@ void aiAction(){
   //Verifica se a ia esta para ganhar neste pattern
   if(bestAiPattern[1] == 2){
     //Se sim joga, na casa livre
-    if(aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][0], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][0], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best i pat 1");
-      getch();
+    line = getHouseByPattern(bestAiPattern[0], 0, LINE);
+    collumn = getHouseByPattern(bestAiPattern[0], 0, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
-    else if(aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][1], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][1], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best i pat 2");
-      getch();
+
+    line = getHouseByPattern(bestAiPattern[0], 1, LINE);
+    collumn = getHouseByPattern(bestAiPattern[0], 1, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
-    else if(aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][2], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][2], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best i pat 3");
-      getch();
+
+    line = getHouseByPattern(bestAiPattern[0], 2, LINE);
+    collumn = getHouseByPattern(bestAiPattern[0], 2, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
   }
@@ -171,22 +119,24 @@ void aiAction(){
   //Verifica se o oponente esta para ganhar neste pattern
   if(bestOponnentPattern[1] == 2){
     //Se sim joga, na casa livre
-    if(aiConvertNumberToValue(victoryPatterns[bestOponnentPattern[0]][0], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestOponnentPattern[0]][0], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best o pat 1");
-      getch();
+    line = getHouseByPattern(bestOponnentPattern[0], 0, LINE);
+    collumn = getHouseByPattern(bestOponnentPattern[0], 0, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
-    else if(aiConvertNumberToValue(victoryPatterns[bestOponnentPattern[0]][1], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestOponnentPattern[0]][1], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best o pat 2");
-      getch();
+
+    line = getHouseByPattern(bestOponnentPattern[0], 1, LINE);
+    collumn = getHouseByPattern(bestOponnentPattern[0], 1, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
-    else if(aiConvertNumberToValue(victoryPatterns[bestOponnentPattern[0]][2], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestOponnentPattern[0]][2], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best o pat 3 = %d, victoryPattern = %d, symbol = %c", bestOponnentPattern[0],victoryPatterns[bestOponnentPattern[0]][2],gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      getch();
+
+    line = getHouseByPattern(bestOponnentPattern[0], 2, LINE);
+    collumn = getHouseByPattern(bestOponnentPattern[0], 2, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
   }
@@ -194,21 +144,24 @@ void aiAction(){
   //Verifica se a ia esta para ganhar neste pattern
   if(bestAiPattern[1] == 1){
     //Se sim joga, na casa livre
-    if(aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][0], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][0], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best i pat 4");
-      getch();
+    line = getHouseByPattern(bestAiPattern[0], 0, LINE);
+    collumn = getHouseByPattern(bestAiPattern[0], 0, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
-    else if(aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][1], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][1], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best i pat 5");
+
+    line = getHouseByPattern(bestAiPattern[0], 1, LINE);
+    collumn = getHouseByPattern(bestAiPattern[0], 1, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
-    else if(aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][2], ' ') == ' '){
-      aiConvertNumberToValue(victoryPatterns[bestAiPattern[0]][2], gameAiState.playerSymbol[gameAiState.currentPlayer]);
-      printf("Best i pat 6");
-      getch();
+
+    line = getHouseByPattern(bestAiPattern[0], 2, LINE);
+    collumn = getHouseByPattern(bestAiPattern[0], 2, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn]  = currentPlayerSymbol;
       return;
     }
   }
@@ -216,11 +169,11 @@ void aiAction(){
   while (TRUE){
     int newHouse = rand() % 9;
 
-    if(aiConvertNumberToValue(newHouse, ' ') == ' '){
-      aiConvertNumberToValue(newHouse, gameAiState.playerSymbol[gameAiState.currentPlayer]);
+    line = getHouseByNumber(newHouse, LINE);
+    collumn = getHouseByNumber(newHouse, COLLUMN);
+    if(gameAiState.currentBoard[line][collumn] == ' '){
+      gameAiState.currentBoard[line][collumn] = currentPlayerSymbol;
       
-      printf("JOguei no rand");
-      getch();
       return;
       break;
     }
