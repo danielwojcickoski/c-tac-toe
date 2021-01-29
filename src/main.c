@@ -6,7 +6,6 @@
 /*---------------------------
   Variables and constants
 ---------------------------*/
-type_appState appState = {0};
 
 /*---------------------------
   Functions
