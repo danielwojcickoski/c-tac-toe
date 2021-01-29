@@ -43,51 +43,41 @@ void aiAction(){
     //https://pt.quora.com/Existe-uma-maneira-de-nunca-perder-no-Jogo-da-Velha-ou-Jogo-do-Galo#:~:text=Fa%C3%A7a%20uma%20jogada%20no%20canto,jogo%20ir%C3%A1%20terminar%20em%20empate.
     //Faz as jogadas corretas para cada situação
 
-
-  unsigned char bestOponnentPattern[2] = {0};//pattern, count
-  unsigned char bestAiPattern[2] = {0};//pattern, count
-  int line = 0;
-  int collumn = 0;
+  unsigned char bestAiPattern[2] = {0}, bestOponnentPattern[2] = {0};//pattern, count
+  int line = 0, collumn = 0;
   char currentPlayerSymbol = gameAiState.playerSymbol[gameAiState.currentPlayer];
+  char anotherPlayerSymbol = gameAiState.playerSymbol[!gameAiState.currentPlayer];
 
   //Verifica em qual pattern tem mais peças do oponente e em qual tem mais minhas
   //Salva o numero do pattern e o valor dele
   for (int count = 0; count < 8; count++){
-    char compareValue[3] = {' '};
+    char compareValue[3] = {0};
     int auxOponnent = 0, auxAi = 0;
     compareValue[0] = gameAiState.currentBoard[getHouseByPattern(count, 0, LINE)][getHouseByPattern(count, 0, COLLUMN)];
     compareValue[1] = gameAiState.currentBoard[getHouseByPattern(count, 1, LINE)][getHouseByPattern(count, 1, COLLUMN)];
     compareValue[2] = gameAiState.currentBoard[getHouseByPattern(count, 2, LINE)][getHouseByPattern(count, 2, COLLUMN)];
 
-    if(compareValue[0] == gameAiState.playerSymbol[gameAiState.currentPlayer]){
-      auxAi++;
-    }
-    else if(compareValue[0] == gameAiState.playerSymbol[!gameAiState.currentPlayer]) {
-      auxOponnent++;
-    }
-
-    if(compareValue[1] == gameAiState.playerSymbol[gameAiState.currentPlayer]){
-      auxAi++;
-    }
-    else if(compareValue[1] == gameAiState.playerSymbol[!gameAiState.currentPlayer]) {
-      auxOponnent++;
-    }
-
-    if(compareValue[2] == gameAiState.playerSymbol[gameAiState.currentPlayer]){
-      auxAi++;
-    }
-    else if(compareValue[2] == gameAiState.playerSymbol[!gameAiState.currentPlayer]) {
-      auxOponnent++;
+    for(int count2 = 0; count2 < 3; count2++){
+      if(compareValue[count2] == currentPlayerSymbol){
+        auxAi++;
+      }
+      else if(compareValue[count2] == anotherPlayerSymbol) {
+        auxOponnent++;
+      }
     }
 
     if(auxAi >= bestAiPattern[1]) {
-      bestAiPattern[0] = count;
-      bestAiPattern[1] = auxAi;
+      if(compareValue[0] == ' ' || compareValue[1] == ' ' || compareValue[2] == ' '){
+        bestAiPattern[0] = count;
+        bestAiPattern[1] = auxAi;
+      }
     }
 
     if(auxOponnent >= bestOponnentPattern[1]){
-      bestOponnentPattern[0] = count;
-      bestOponnentPattern[1] = auxOponnent;
+      if(compareValue[0] == ' ' || compareValue[1] == ' ' || compareValue[2] == ' '){
+        bestOponnentPattern[0] = count;
+        bestOponnentPattern[1] = auxOponnent;
+      }
     }
   }
 
@@ -178,7 +168,4 @@ void aiAction(){
       break;
     }
   }
-
-  printf("não fiz nada");
-  getch();
 }

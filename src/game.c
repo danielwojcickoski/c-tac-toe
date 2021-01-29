@@ -61,8 +61,6 @@ void playerAction(){
       if(selection >= KEY_NUM1 && selection <= KEY_NUM9){
         char newSymbol = gameState.playerSymbol[gameState.currentPlayer];
 
-        printf("%d ", selection);
-
         if(selection >= KEY_NUM7 && selection <= KEY_NUM9)
           selection -= 55;
         else if(selection >= KEY_NUM4 && selection <= KEY_NUM6)
@@ -72,8 +70,6 @@ void playerAction(){
 
         unsigned char line = getHouseByNumber(selection, LINE);
         unsigned char collumn = getHouseByNumber(selection, COLLUMN);
-
-        printf("%d\n", selection);
 
         if(gameState.currentBoard[line][collumn] == ' '){
           gameState.currentBoard[line][collumn] = newSymbol;
