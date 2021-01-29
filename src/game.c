@@ -94,7 +94,7 @@ void playerAction(){
 
 void game(enum_gameType gameType){
   gameInitVars(gameType);
-  setGameSreenState(gameState);
+  setGameScreenState(gameState);
 
   while(gameState.gameWinner == WINNER_NONE) {
     printCurrentScreen();
@@ -111,7 +111,7 @@ void game(enum_gameType gameType){
     }
 
     verifyWinner();
-    setGameSreenState(gameState);
+    setGameScreenState(gameState);
   }
 
   if(gameState.gameWinner != WINNER_ERROR)

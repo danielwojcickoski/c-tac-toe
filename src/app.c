@@ -49,19 +49,16 @@ void playScreenAction(){
   switch (getCurrentScreenState()){
     case PLAY_PVP:
       setCurrentScreen(GAME_SCREEN);
-      setCurrentScreenState(0);
       game(GAME_PVP);
       break;
 
     case PLAY_PVC:
       setCurrentScreen(GAME_SCREEN);
-      setCurrentScreenState(0);
       game(GAME_PVC);
       break;
 
     case PLAY_ONLINE:
       setCurrentScreen(GAME_SCREEN);
-      setCurrentScreenState(0);
       game(GAME_ONLINE);
       break;
 
@@ -90,6 +87,11 @@ void handleMenuSelection(int selection){
 
     case CONFIG_SCREEN:
       configScreenAction();
+      break;
+
+    case WINNER_SCREEN:
+      configScreenAction();
+      setCurrentScreen(PLAY_SCREEN);
       break;
 
     default:

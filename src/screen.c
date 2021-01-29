@@ -99,7 +99,7 @@ int getCurrentScreenLastvalue() {
   }
 }
 
-void setGameSreenState(type_gameState newGameScreenState){
+void setGameScreenState(type_gameState newGameScreenState){
   gameScreenState = newGameScreenState;
 }
 

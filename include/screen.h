@@ -57,5 +57,5 @@ void setCurrentScreenState(int newValue);
 int getCurrentScreenState();
 int getCurrentScreenFirstvalue();
 int getCurrentScreenLastvalue();
-void setGameSreenState(type_gameState newGameScreenState);
+void setGameScreenState(type_gameState newGameScreenState);
 void printCurrentScreen();
