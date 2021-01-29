@@ -8,6 +8,7 @@
 typedef enum {
   GAME_PVP = 0,
   GAME_PVC,
+  GAME_CVC,
   GAME_ONLINE,
 } enum_gameType;
 

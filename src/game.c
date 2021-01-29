@@ -95,6 +95,9 @@ void game(enum_gameType gameType){
   while(gameState.gameWinner == WINNER_NONE) {
     printCurrentScreen();
 
+    if(gameState.gameType == GAME_CVC)
+      getch();
+
     if(gameState.gameType == GAME_PVC && gameState.currentPlayer == 1){
       setAiGameState(gameState);
       aiAction();
@@ -102,7 +105,14 @@ void game(enum_gameType gameType){
       gameState.currentPlayer = !gameState.currentPlayer;
       gameState.currentTurn++;
     }
-    else{
+    else if(gameState.gameType == GAME_CVC){
+      setAiGameState(gameState);
+      aiAction();
+      gameState = getAiGameState();
+      gameState.currentPlayer = !gameState.currentPlayer;
+      gameState.currentTurn++;
+    }
+    else {
       playerAction();
     }
 

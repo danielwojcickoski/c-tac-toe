@@ -57,6 +57,11 @@ void playScreenAction(){
       game(GAME_PVC);
       break;
 
+    case PLAY_CVC:
+      setCurrentScreen(GAME_SCREEN);
+      game(GAME_CVC);
+      break;
+
     case PLAY_ONLINE:
       setCurrentScreen(GAME_SCREEN);
       game(GAME_ONLINE);

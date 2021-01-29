@@ -33,7 +33,7 @@ void setCurrentScreenState(int newValue) {
     case PLAY_SCREEN:
       screenState.playScreenState = newValue;
       break;
-    
+
     default:
       break;
   }
@@ -52,7 +52,7 @@ int getCurrentScreenState() {
     case PLAY_SCREEN:
       return screenState.playScreenState;
       break;
-    
+
     default:
       return 0;
       break;
@@ -72,7 +72,7 @@ int getCurrentScreenFirstvalue() {
     case PLAY_SCREEN:
       return PLAY_FIRST_VALUE;
       break;
-    
+
     default:
       return 0;
       break;
@@ -92,7 +92,7 @@ int getCurrentScreenLastvalue() {
     case PLAY_SCREEN:
       return PLAY_LAST_VALUE;
       break;
-    
+
     default:
       return 0;
       break;
@@ -111,10 +111,17 @@ void gotoxy( int x, int y )
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void discoverScreenSize(){  
+void configScreenSize(){
+  //Hide cursor
+  CONSOLE_CURSOR_INFO info;
+  info.dwSize = 100;
+  info.bVisible = 0;
+  SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+
+  //Discover screen info
   CONSOLE_SCREEN_BUFFER_INFO screenInfo = {0};
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screenInfo);
-  
+
   screenState.screenSize = screenInfo.dwMaximumWindowSize;
 }
 
@@ -151,17 +158,19 @@ void printConfigScreen(){
 }
 
 void printPlayScreen(){
-  unsigned char prints[4] = {0};
+  unsigned char prints[5] = {0};
   prints[0] = getCurrentScreenState() == PLAY_PVP ? 1 : 0;
   prints[1] = getCurrentScreenState() == PLAY_PVC ? 1 : 0;
-  prints[2] = getCurrentScreenState() == PLAY_ONLINE ? 1 : 0;
-  prints[3] = getCurrentScreenState() == PLAY_RETURN ? 1 : 0;
+  prints[2] = getCurrentScreenState() == PLAY_CVC ? 1 : 0;
+  prints[3] = getCurrentScreenState() == PLAY_ONLINE ? 1 : 0;
+  prints[4] = getCurrentScreenState() == PLAY_RETURN ? 1 : 0;
 
   printf("\n\n");
   printf("%s%s PVP %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVP    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
   printf("%s%s PVC %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVC    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
-  printf("%s%s Online %s\n", genPreSpaces(calcPreSpaces(sizeof("    Online    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
-  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[3] == 1 ? "-->" : "   ", prints[3] == 1 ? "<--" : "   ");
+  printf("%s%s CVC %s\n", genPreSpaces(calcPreSpaces(sizeof("    CVC    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
+  printf("%s%s Online %s\n", genPreSpaces(calcPreSpaces(sizeof("    Online    "))), prints[3] == 1 ? "-->" : "   ", prints[3] == 1 ? "<--" : "   ");
+  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[4] == 1 ? "-->" : "   ", prints[4] == 1 ? "<--" : "   ");
 }
 
 void printGameScreen(){
@@ -178,6 +187,8 @@ void printGameScreen(){
   printf("%s---+---+---\n", genPreSpaces(boardSpace));
   printf("%s %c | %c | %c \n", genPreSpaces(boardSpace), gameScreenState.currentBoard[2][0], gameScreenState.currentBoard[2][1], gameScreenState.currentBoard[2][2]);
 
+  if(gameScreenState.gameType == GAME_CVC)
+    printf("\n\n%sPress any key to next turn\n", genPreSpaces(calcPreSpaces(sizeof("Press any key to next turn"))));
 }
 
 void printWinnerScreen(){
@@ -191,10 +202,10 @@ void printWinnerScreen(){
 }
 
 void printCurrentScreen() {
-  discoverScreenSize();
+  configScreenSize();
 
   system("cls");
-  switch (screenState.currentScreen){      
+  switch (screenState.currentScreen){
     case MENU_SCREEN:
       printMenuScreen();
       break;
@@ -214,7 +225,7 @@ void printCurrentScreen() {
     case WINNER_SCREEN:
       printWinnerScreen();
       break;
-    
+
     default:
       break;
   }
