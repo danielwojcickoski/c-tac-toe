@@ -111,13 +111,14 @@ void gotoxy( int x, int y )
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void configScreenSize(){
-  //Hide cursor
+void setCursor(enum_cursorState cursorState){
   CONSOLE_CURSOR_INFO info;
   info.dwSize = 100;
-  info.bVisible = 0;
+  info.bVisible = cursorState;
   SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+}
 
+void configScreenSize(){
   //Discover screen info
   CONSOLE_SCREEN_BUFFER_INFO screenInfo = {0};
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screenInfo);

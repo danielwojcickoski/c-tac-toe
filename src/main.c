@@ -11,6 +11,8 @@
   Functions
 ---------------------------*/
 int main() {
+  setCursor(HIDDEN);
+
   parseConfigs();
 
   app();
