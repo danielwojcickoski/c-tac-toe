@@ -6,6 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <windows.h>
 #include "./game.h"
 #include "./ai.h"
 #include "./app.h"

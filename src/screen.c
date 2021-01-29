@@ -103,44 +103,96 @@ void setGameScreenState(type_gameState newGameScreenState){
   gameScreenState = newGameScreenState;
 }
 
+void gotoxy( int x, int y )
+{
+    COORD coord;
+    coord.X = (short)x;
+    coord.Y = (short)y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+void discoverScreenSize(){  
+  CONSOLE_SCREEN_BUFFER_INFO screenInfo = {0};
+  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screenInfo);
+  
+  screenState.screenSize = screenInfo.dwMaximumWindowSize;
+}
+
+int calcPreSpaces(int discount){
+  int spaces = ((screenState.screenSize.X - discount) / 2);
+  return spaces;
+}
+
+char preSpaces[1000];
+const char* genPreSpaces(int spaces){
+  memset(preSpaces, 0, sizeof(preSpaces));
+  memset(preSpaces, ' ', spaces);
+  return preSpaces;
+}
+
 void printMenuScreen(){
-  printf("Play\t\t%s\n", screenState.menuScreenState == MENU_PLAY ? "<--" : "");
-  printf("Configs\t\t%s\n", screenState.menuScreenState == MENU_CONFIG ? "<--" : "");
-  printf("Exit\t\t%s\n", screenState.menuScreenState == MENU_EXIT ? "<--" : "");
+  unsigned char prints[3] = {0};
+  prints[0] = getCurrentScreenState() == MENU_PLAY ? 1 : 0;
+  prints[1] = getCurrentScreenState() == MENU_CONFIG ? 1 : 0;
+  prints[2] = getCurrentScreenState() == MENU_EXIT ? 1 : 0;
+
+  printf("\n\n");
+  printf("%s%s Play %s\n", genPreSpaces(calcPreSpaces(sizeof("    Play    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printf("%s%s Configs %s\n", genPreSpaces(calcPreSpaces(sizeof("    Configs    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
+  printf("%s%s Exit %s\n", genPreSpaces(calcPreSpaces(sizeof("    Exit    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
 }
 
 void printConfigScreen(){
-  printf("Return\t\t%s\n", screenState.configScreenState == CONFIG_RETURN ? "<--" : "");
+  unsigned char prints[1] = {0};
+  prints[0] = getCurrentScreenState() == CONFIG_RETURN ? 1 : 0;
+
+  printf("\n\n");
+  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
 }
 
 void printPlayScreen(){
-  printf("PVP\t\t%s\n", screenState.playScreenState == PLAY_PVP ? "<--" : "");
-  printf("PVC\t\t%s\n", screenState.playScreenState == PLAY_PVC ? "<--" : "");
-  printf("Online\t\t%s\n", screenState.playScreenState == PLAY_ONLINE ? "<--" : "");
-  printf("Return\t\t%s\n", screenState.playScreenState == PLAY_RETURN ? "<--" : "");
+  unsigned char prints[4] = {0};
+  prints[0] = getCurrentScreenState() == PLAY_PVP ? 1 : 0;
+  prints[1] = getCurrentScreenState() == PLAY_PVC ? 1 : 0;
+  prints[2] = getCurrentScreenState() == PLAY_ONLINE ? 1 : 0;
+  prints[3] = getCurrentScreenState() == PLAY_RETURN ? 1 : 0;
 
+  printf("\n\n");
+  printf("%s%s PVP %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVP    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printf("%s%s PVC %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVC    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
+  printf("%s%s Online %s\n", genPreSpaces(calcPreSpaces(sizeof("    Online    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
+  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[3] == 1 ? "-->" : "   ", prints[3] == 1 ? "<--" : "   ");
 }
 
 void printGameScreen(){
-  printf("Current Player: %c\n", gameScreenState.playerSymbol[gameScreenState.currentPlayer]);
-  printf(" %c | %c | %c \n", gameScreenState.currentBoard[0][0], gameScreenState.currentBoard[0][1], gameScreenState.currentBoard[0][2]);
-  printf("---+---+---\n");
-  printf(" %c | %c | %c \n", gameScreenState.currentBoard[1][0], gameScreenState.currentBoard[1][1], gameScreenState.currentBoard[1][2]);
-  printf("---+---+---\n");
-  printf(" %c | %c | %c \n", gameScreenState.currentBoard[2][0], gameScreenState.currentBoard[2][1], gameScreenState.currentBoard[2][2]);
+  int boardSpace = calcPreSpaces(sizeof("---+---+---"));
+
+  printf("\n");
+  printf("%sPress ESC to quit", genPreSpaces(calcPreSpaces(sizeof("Press ESC to quit"))));
+  printf("\n\n");
+  printf("%sCurrent Player: %c", genPreSpaces(calcPreSpaces(sizeof("Current Player:  "))), gameScreenState.playerSymbol[gameScreenState.currentPlayer]);
+  printf("\n\n");
+  printf("%s %c | %c | %c \n", genPreSpaces(boardSpace), gameScreenState.currentBoard[0][0], gameScreenState.currentBoard[0][1], gameScreenState.currentBoard[0][2]);
+  printf("%s---+---+---\n", genPreSpaces(boardSpace));
+  printf("%s %c | %c | %c \n", genPreSpaces(boardSpace), gameScreenState.currentBoard[1][0], gameScreenState.currentBoard[1][1], gameScreenState.currentBoard[1][2]);
+  printf("%s---+---+---\n", genPreSpaces(boardSpace));
+  printf("%s %c | %c | %c \n", genPreSpaces(boardSpace), gameScreenState.currentBoard[2][0], gameScreenState.currentBoard[2][1], gameScreenState.currentBoard[2][2]);
 
 }
 
 void printWinnerScreen(){
+  printf("\n\n");
   if(gameScreenState.gameWinner == WINNER_TOE){
-    printf("Toe");
+    printf("%sToe", genPreSpaces(calcPreSpaces(sizeof("sToe"))));
   }
   else {
-    printf("Player %c wins", gameScreenState.playerSymbol[gameScreenState.gameWinner - 1]);
+    printf("%sPlayer %c wins", genPreSpaces(calcPreSpaces(sizeof("Player X wins"))), gameScreenState.playerSymbol[gameScreenState.gameWinner - 1]);
   }
 }
 
 void printCurrentScreen() {
+  discoverScreenSize();
+
   system("cls");
   switch (screenState.currentScreen){      
     case MENU_SCREEN:

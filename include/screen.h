@@ -46,6 +46,7 @@ typedef struct{
   enum_menuScreenState menuScreenState;
   enum_configScreenState configScreenState;
   enum_playScreenState playScreenState;
+  COORD screenSize;
 } type_screenState;
 
 /*---------------------------
