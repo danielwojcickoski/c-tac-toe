@@ -58,6 +58,6 @@ unsigned char getHouseByPattern(int pattern, int house, int position){
   @return:
     int: 0, 1, 2 = number of line|column of selected house
 */
-unsigned char getHouseByNumber(int house, int position){
+unsigned char getHouseByNumber(int house, enum_housePositions position){
   return housePatterns[house][position];
 }
