@@ -44,7 +44,7 @@ unsigned char victoryPatterns[8][3] = {
   @return:
     int: 0, 1, 2 = number of line|column of selected house of selected pattern
 */
-unsigned char getHouseByPattern(int pattern, int house, int position){
+unsigned char getHouseByPattern(int pattern, int house, enum_housePositions position){
   int houseOfPattern = victoryPatterns[pattern][house];
 
   return housePatterns[houseOfPattern][position];

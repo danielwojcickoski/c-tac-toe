@@ -13,5 +13,5 @@ typedef enum {
 /*---------------------------
   Functions
 ---------------------------*/
-unsigned char getHouseByPattern(int pattern, int house, int position);
-unsigned char getHouseByNumber(int house, int position);
+unsigned char getHouseByPattern(int pattern, int house, enum_housePositions position);
+unsigned char getHouseByNumber(int house, enum_housePositions position);
