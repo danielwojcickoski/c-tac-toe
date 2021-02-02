@@ -86,15 +86,19 @@ typedef enum {
   VISIBLE,
 } enum_cursorState;
 
+typedef enum {
+  FIRST = 0,
+  CURRENT,
+  LAST,
+} enum_stateFlag;
+
 /*---------------------------
   Functions
 ---------------------------*/
 void setCurrentScreen(enum_screens newScreen);
 enum_screens getCurrentScreen();
 void setCurrentScreenState(int newValue);
-int getCurrentScreenState();
-int getCurrentScreenFirstvalue();
-int getCurrentScreenLastvalue();
+int getCurrentScreenState(enum_stateFlag stateFlag);
 void setGameScreenState(type_gameState newGameScreenState);
 void setCursor(enum_cursorState cursorState);
 void printCurrentScreen();

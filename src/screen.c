@@ -51,93 +51,30 @@ void setCurrentScreenState(int newValue) {
   }
 }
 
-int getCurrentScreenState() {
+int getCurrentScreenState(enum_stateFlag stateFlag) {
   switch (screenState.currentScreen){
     case MENU_SCREEN:
-      return screenState.menuScreenState;
+      return (stateFlag == FIRST) ? MENU_FIRST_VALUE : (stateFlag == LAST) ? MENU_LAST_VALUE : screenState.menuScreenState;
       break;
 
     case CONFIG_SCREEN:
-      return screenState.configScreenState;
+      return (stateFlag == FIRST) ? CONFIG_FIRST_VALUE : (stateFlag == LAST) ? CONFIG_LAST_VALUE : screenState.configScreenState;
       break;
 
     case PLAY_SCREEN:
-      return screenState.playScreenState;
+      return (stateFlag == FIRST) ? PLAY_FIRST_VALUE : (stateFlag == LAST) ? PLAY_LAST_VALUE : screenState.playScreenState;
       break;
 
     case ONLINE_SCREEN:
-      return screenState.onlineScreenState;
+      return (stateFlag == FIRST) ? ONLINE_FIRST_VALUE : (stateFlag == LAST) ? ONLINE_LAST_VALUE : screenState.onlineScreenState;
       break;
 
     case SERVER_SCREEN:
-      return screenState.serverScreenState;
+      return (stateFlag == FIRST) ? SERVER_FIRST_VALUE : (stateFlag == LAST) ? SERVER_LAST_VALUE : screenState.serverScreenState;
       break;
 
     case CLIENT_SCREEN:
-      return screenState.clientScreenState;
-
-    default:
-      return 0;
-      break;
-  }
-}
-
-int getCurrentScreenFirstvalue() {
-  switch (screenState.currentScreen){
-    case MENU_SCREEN:
-      return MENU_FIRST_VALUE;
-      break;
-
-    case CONFIG_SCREEN:
-      return CONFIG_FIRST_VALUE;
-      break;
-
-    case PLAY_SCREEN:
-      return PLAY_FIRST_VALUE;
-      break;
-
-    case ONLINE_SCREEN:
-      return ONLINE_FIRST_VALUE;
-      break;
-
-    case SERVER_SCREEN:
-      return SERVER_FIRST_VALUE;
-      break;
-
-    case CLIENT_SCREEN:
-      return SERVER_FIRST_VALUE;
-      break;
-
-    default:
-      return 0;
-      break;
-  }
-}
-
-int getCurrentScreenLastvalue() {
-  switch (screenState.currentScreen){
-    case MENU_SCREEN:
-      return MENU_LAST_VALUE;
-      break;
-
-    case CONFIG_SCREEN:
-      return CONFIG_LAST_VALUE;
-      break;
-
-    case PLAY_SCREEN:
-      return PLAY_LAST_VALUE;
-      break;
-
-    case ONLINE_SCREEN:
-      return ONLINE_LAST_VALUE;
-      break;
-
-    case SERVER_SCREEN:
-      return SERVER_LAST_VALUE;
-      break;
-
-    case CLIENT_SCREEN:
-      return SERVER_LAST_VALUE;
+      return (stateFlag == FIRST) ? CLIENT_FIRST_VALUE : (stateFlag == LAST) ? CLIENT_LAST_VALUE : screenState.clientScreenState;
       break;
 
     default:
@@ -150,14 +87,6 @@ void setGameScreenState(type_gameState newGameScreenState){
   gameScreenState = newGameScreenState;
 }
 
-void gotoxy( int x, int y )
-{
-    COORD coord;
-    coord.X = (short)x;
-    coord.Y = (short)y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
 void setCursor(enum_cursorState cursorState){
   CONSOLE_CURSOR_INFO info;
   info.dwSize = 100;
@@ -165,7 +94,7 @@ void setCursor(enum_cursorState cursorState){
   SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 }
 
-void configScreenSize(){
+void configScreen(){
   CONSOLE_SCREEN_BUFFER_INFO screenInfo = {0};
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screenInfo);
 
@@ -184,48 +113,37 @@ const char* genPreSpaces(int spaces){
   return preSpaces;
 }
 
-void printMenuScreen(){
-  unsigned char prints[3] = {0};
-  prints[0] = getCurrentScreenState() == MENU_PLAY ? 1 : 0;
-  prints[1] = getCurrentScreenState() == MENU_CONFIG ? 1 : 0;
-  prints[2] = getCurrentScreenState() == MENU_EXIT ? 1 : 0;
+void printInCenter(char * text, int optionState){
+  int flag = getCurrentScreenState(CURRENT) == optionState ? 1 : 0;
+  printf("%s%s %s %s\n", genPreSpaces(calcPreSpaces(strlen(text) + 8)), flag == 1 ? "-->" : "   ", text, flag == 1 ? "<--" : "   ");
+}
 
+void printMenuScreen(){
   printf("\n\n");
-  printf("%s%s Play %s\n", genPreSpaces(calcPreSpaces(sizeof("    Play    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
-  printf("%s%s Configs %s\n", genPreSpaces(calcPreSpaces(sizeof("    Configs    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
-  printf("%s%s Exit %s\n", genPreSpaces(calcPreSpaces(sizeof("    Exit    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
+  printInCenter("Play", MENU_PLAY);
+  printInCenter("Settings", MENU_CONFIG);
+  printInCenter("Exit", MENU_EXIT);
 }
 
 void printConfigScreen(){
-  unsigned char prints[1] = {0};
-  prints[0] = getCurrentScreenState() == CONFIG_RETURN ? 1 : 0;
-
   printf("\n\n");
-  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printInCenter("Return", CONFIG_RETURN);
 }
 
 void printPlayScreen(){
-  unsigned char prints[5] = {0};
-  prints[0] = getCurrentScreenState() == PLAY_PVP ? 1 : 0;
-  prints[1] = getCurrentScreenState() == PLAY_PVC ? 1 : 0;
-  prints[2] = getCurrentScreenState() == PLAY_CVC ? 1 : 0;
-  prints[3] = getCurrentScreenState() == PLAY_ONLINE ? 1 : 0;
-  prints[4] = getCurrentScreenState() == PLAY_RETURN ? 1 : 0;
-
   printf("\n\n");
-  printf("%s%s PvP %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVP    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
-  printf("%s%s PvC %s\n", genPreSpaces(calcPreSpaces(sizeof("    PVC    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
-  printf("%s%s CvC %s\n", genPreSpaces(calcPreSpaces(sizeof("    CVC    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
-  printf("%s%s Online %s\n", genPreSpaces(calcPreSpaces(sizeof("    Online    "))), prints[3] == 1 ? "-->" : "   ", prints[3] == 1 ? "<--" : "   ");
-  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[4] == 1 ? "-->" : "   ", prints[4] == 1 ? "<--" : "   ");
+  printInCenter("PvP", PLAY_PVP);
+  printInCenter("PvC", PLAY_PVC);
+  printInCenter("CvC", PLAY_CVC);
+  printInCenter("Online", PLAY_ONLINE);
+  printInCenter("Return", PLAY_RETURN);
 }
 
 void printGameScreen(){
-  int boardSpace = calcPreSpaces(sizeof("---+---+---"));
+  int boardSpace = calcPreSpaces(strlen("---+---+---"));
 
-  printf("\n");
-  printf("%sPress ESC to quit", genPreSpaces(calcPreSpaces(sizeof("Press ESC to quit"))));
   printf("\n\n");
+  printInCenter("Press ESC to quit", -1);
   printf("%sCurrent Player: %c", genPreSpaces(calcPreSpaces(sizeof("Current Player:  "))), gameScreenState.playerSymbol[gameScreenState.currentPlayer]);
   printf("\n\n");
   printf("%s %c | %c | %c \n", genPreSpaces(boardSpace), gameScreenState.currentBoard[0][0], gameScreenState.currentBoard[0][1], gameScreenState.currentBoard[0][2]);
@@ -234,14 +152,16 @@ void printGameScreen(){
   printf("%s---+---+---\n", genPreSpaces(boardSpace));
   printf("%s %c | %c | %c \n", genPreSpaces(boardSpace), gameScreenState.currentBoard[2][0], gameScreenState.currentBoard[2][1], gameScreenState.currentBoard[2][2]);
 
-  if(gameScreenState.gameType == GAME_CVC)
-    printf("\n\n%sPress any key to next turn\n", genPreSpaces(calcPreSpaces(sizeof("Press any key to next turn"))));
+  if(gameScreenState.gameType == GAME_CVC){
+    printf("\n\n");
+    printInCenter("Press any key to next turn", -1);
+  }
 }
 
 void printWinnerScreen(){
   printf("\n\n");
   if(gameScreenState.gameWinner == WINNER_TOE){
-    printf("%sToe", genPreSpaces(calcPreSpaces(sizeof("sToe"))));
+    printInCenter("Toe", -1);
   }
   else {
     printf("%sPlayer %c wins", genPreSpaces(calcPreSpaces(sizeof("Player X wins"))), gameScreenState.playerSymbol[gameScreenState.gameWinner - 1]);
@@ -249,35 +169,24 @@ void printWinnerScreen(){
 }
 
 void printOnlineScreen(){
-  unsigned char prints[5] = {0};
-  prints[0] = getCurrentScreenState() == ONLINE_SERVER ? 1 : 0;
-  prints[1] = getCurrentScreenState() == ONLINE_CLIENT ? 1 : 0;
-  prints[2] = getCurrentScreenState() == ONLINE_RETURN ? 1 : 0;
-
   printf("\n\n");
-  printf("%s%s Server %s\n", genPreSpaces(calcPreSpaces(sizeof("    SERVER    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
-  printf("%s%s Client %s\n", genPreSpaces(calcPreSpaces(sizeof("    Client    "))), prints[1] == 1 ? "-->" : "   ", prints[1] == 1 ? "<--" : "   ");
-  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[2] == 1 ? "-->" : "   ", prints[2] == 1 ? "<--" : "   ");
+  printInCenter("Server", ONLINE_SERVER);
+  printInCenter("Client", ONLINE_CLIENT);
+  printInCenter("Return", ONLINE_RETURN);
 }
 
 void printServerScreen(){
-  unsigned char prints[1] = {0};
-  prints[0] = getCurrentScreenState() == SERVER_RETURN ? 1 : 0;
-
   printf("\n\n");
-  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printInCenter("Return", SERVER_RETURN);
 }
 
 void printClientScreen(){
-  unsigned char prints[1] = {0};
-  prints[0] = getCurrentScreenState() == CLIENT_RETURN ? 1 : 0;
-
   printf("\n\n");
-  printf("%s%s Return %s\n", genPreSpaces(calcPreSpaces(sizeof("    Return    "))), prints[0] == 1 ? "-->" : "   ", prints[0] == 1 ? "<--" : "   ");
+  printInCenter("Return", CLIENT_RETURN);
 }
 
 void printCurrentScreen() {
-  configScreenSize();
+  configScreen();
 
   system("cls");
   switch (screenState.currentScreen){

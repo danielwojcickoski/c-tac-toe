@@ -12,12 +12,12 @@ type_appState appState;
   Functions
 ---------------------------*/
 void menuScreenAction(){
-  switch (getCurrentScreenState()){
+  switch (getCurrentScreenState(CURRENT)){
     case MENU_PLAY:
       setCurrentScreen(PLAY_SCREEN);
       setCurrentScreenState(PLAY_FIRST_VALUE + 1);
       break;
-      
+
     case MENU_CONFIG:
       setCurrentScreen(CONFIG_SCREEN);
       setCurrentScreenState(CONFIG_FIRST_VALUE + 1);
@@ -26,7 +26,7 @@ void menuScreenAction(){
     case MENU_EXIT:
       appState.exitFlag = EXIT_STATE_ESCAPE;
       break;
-    
+
     default:
       setCurrentScreenState(MENU_FIRST_VALUE + 1);
       break;
@@ -34,11 +34,11 @@ void menuScreenAction(){
 }
 
 void configScreenAction(){
-  switch (getCurrentScreenState()){
+  switch (getCurrentScreenState(CURRENT)){
     case CONFIG_RETURN:
       setCurrentScreen(MENU_SCREEN);
       break;
-    
+
     default:
       setCurrentScreenState(CONFIG_FIRST_VALUE + 1);
       break;
@@ -46,7 +46,7 @@ void configScreenAction(){
 }
 
 void playScreenAction(){
-  switch (getCurrentScreenState()){
+  switch (getCurrentScreenState(CURRENT)){
     case PLAY_PVP:
       setCurrentScreen(GAME_SCREEN);
       game(GAME_PVP);
@@ -70,7 +70,7 @@ void playScreenAction(){
     case PLAY_RETURN:
       setCurrentScreen(MENU_SCREEN);
       break;
-    
+
     default:
       setCurrentScreenState(PLAY_FIRST_VALUE + 1);
       break;
@@ -78,7 +78,7 @@ void playScreenAction(){
 }
 
 void onlineScreenAction(){
-  switch (getCurrentScreenState()){
+  switch (getCurrentScreenState(CURRENT)){
     case ONLINE_SERVER:
       setCurrentScreen(SERVER_SCREEN);
       setCurrentScreenState(SERVER_FIRST_VALUE + 1);
@@ -92,7 +92,7 @@ void onlineScreenAction(){
     case ONLINE_RETURN:
       setCurrentScreen(PLAY_SCREEN);
       break;
-    
+
     default:
       setCurrentScreenState(PLAY_FIRST_VALUE + 1);
       break;
@@ -100,11 +100,11 @@ void onlineScreenAction(){
 }
 
 void serverScreenAction(){
-  switch (getCurrentScreenState()){
+  switch (getCurrentScreenState(CURRENT)){
     case SERVER_RETURN:
       setCurrentScreen(ONLINE_SCREEN);
       break;
-    
+
     default:
       setCurrentScreenState(PLAY_FIRST_VALUE + 1);
       break;
@@ -112,11 +112,11 @@ void serverScreenAction(){
 }
 
 void clientScreenAction(){
-  switch (getCurrentScreenState()){
+  switch (getCurrentScreenState(CURRENT)){
     case CLIENT_RETURN:
       setCurrentScreen(ONLINE_SCREEN);
       break;
-    
+
     default:
       setCurrentScreenState(PLAY_FIRST_VALUE + 1);
       break;
@@ -167,14 +167,14 @@ void appAction(){
   int selection = getch();
 
   if(selection == KEY_ARROW_DOWN){
-    setCurrentScreenState(getCurrentScreenState() + 1);
-    if(getCurrentScreenState() == getCurrentScreenLastvalue())
-      setCurrentScreenState(getCurrentScreenFirstvalue() + 1);
+    setCurrentScreenState(getCurrentScreenState(CURRENT) + 1);
+    if(getCurrentScreenState(CURRENT) == getCurrentScreenState(LAST))
+      setCurrentScreenState(getCurrentScreenState(FIRST) + 1);
   }
   else if(selection == KEY_ARROW_UP) {
-    setCurrentScreenState(getCurrentScreenState() - 1);
-    if(getCurrentScreenState() == getCurrentScreenFirstvalue())
-      setCurrentScreenState(getCurrentScreenLastvalue() - 1);
+    setCurrentScreenState(getCurrentScreenState(CURRENT) - 1);
+    if(getCurrentScreenState(CURRENT) == getCurrentScreenState(FIRST))
+      setCurrentScreenState(getCurrentScreenState(LAST) - 1);
   }
   else{
     handleMenuSelection(selection);
