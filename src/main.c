@@ -1,4 +1,11 @@
 /*---------------------------
+  Tic-Tac-Toe game in C
+
+  Date: 2021/02/01
+  Author: Daniel Wojcickoski
+---------------------------*/
+
+/*---------------------------
   Includes
 ---------------------------*/
 #include "../include/main.h"
