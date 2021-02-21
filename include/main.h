@@ -6,13 +6,21 @@
 #include <time.h>
 #include <stdlib.h>
 #include <conio.h>
-#include <windows.h>
 #include "./game.h"
 #include "./ai.h"
 #include "./app.h"
 #include "./config.h"
-#include "./screen.h"
+#include "./screen_control.h"
 #include "./patterns.h"
+#include "./os_interface.h"
+
+/*---------------------------
+  Compilation
+---------------------------*/
+//Choose 1
+#define OS_WIN32
+//#define OS_LINUX
+//#define OS_DARWIN
 
 /*---------------------------
   Variables and Constants

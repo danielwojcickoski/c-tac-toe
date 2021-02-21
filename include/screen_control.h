@@ -78,7 +78,7 @@ typedef struct {
   enum_playScreenState onlineScreenState;
   enum_serverScreenState serverScreenState;
   enum_clientScreenState clientScreenState;
-  COORD screenSize;
+  short xScreenSize;
 } type_screenState;
 
 typedef enum {
