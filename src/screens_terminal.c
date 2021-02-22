@@ -31,7 +31,13 @@ void terminal_printMenuScreen(){
   printf("\n\n");
   printInCenter("Play", MENU_PLAY);
   printInCenter("Settings", MENU_CONFIG);
+  printInCenter("Help", MENU_HELP);
   printInCenter("Exit", MENU_EXIT);
+}
+
+void terminal_printHelpScreen(){
+  printf("\n\n");
+  printInCenter("Return", HELP_RETURN);
 }
 
 void terminal_printConfigScreen(){

@@ -18,6 +18,11 @@ void menuScreenAction(){
       setCurrentScreenState(PLAY_FIRST_VALUE + 1);
       break;
 
+    case MENU_HELP:
+      setCurrentScreen(HELP_SCREEN);
+      setCurrentScreenState(HELP_FIRST_VALUE + 1);
+      break;
+
     case MENU_CONFIG:
       setCurrentScreen(CONFIG_SCREEN);
       setCurrentScreenState(CONFIG_FIRST_VALUE + 1);
@@ -41,6 +46,18 @@ void configScreenAction(){
 
     default:
       setCurrentScreenState(CONFIG_FIRST_VALUE + 1);
+      break;
+  }
+}
+
+void helpScreenAction(){
+  switch (getCurrentScreenState(CURRENT)){
+    case CONFIG_RETURN:
+      setCurrentScreen(MENU_SCREEN);
+      break;
+
+    default:
+      setCurrentScreenState(HELP_FIRST_VALUE + 1);
       break;
   }
 }
@@ -132,12 +149,16 @@ void handleMenuSelection(int selection){
       menuScreenAction();
       break;
 
-    case PLAY_SCREEN:
-      playScreenAction();
+    case HELP_SCREEN:
+      helpScreenAction();
       break;
 
     case CONFIG_SCREEN:
       configScreenAction();
+      break;
+
+    case PLAY_SCREEN:
+      playScreenAction();
       break;
 
     case WINNER_SCREEN:

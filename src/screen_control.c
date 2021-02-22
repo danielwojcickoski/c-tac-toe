@@ -27,6 +27,10 @@ void setCurrentScreenState(int newValue) {
       screenState.menuScreenState = newValue;
       break;
 
+    case HELP_SCREEN:
+      screenState.helpScreenState = newValue;
+      break;
+
     case CONFIG_SCREEN:
       screenState.configScreenState = newValue;
       break;
@@ -56,6 +60,10 @@ int getCurrentScreenState(enum_stateFlag stateFlag) {
   switch (screenState.currentScreen){
     case MENU_SCREEN:
       return (stateFlag == FIRST) ? MENU_FIRST_VALUE : (stateFlag == LAST) ? MENU_LAST_VALUE : screenState.menuScreenState;
+      break;
+
+    case HELP_SCREEN:
+      return (stateFlag == FIRST) ? HELP_FIRST_VALUE : (stateFlag == LAST) ? HELP_LAST_VALUE : screenState.helpScreenState;
       break;
 
     case CONFIG_SCREEN:
@@ -93,6 +101,10 @@ void printCurrentScreen() {
   switch (screenState.currentScreen){
     case MENU_SCREEN:
       terminal_printMenuScreen();
+      break;
+
+    case HELP_SCREEN:
+      terminal_printHelpScreen();
       break;
 
     case CONFIG_SCREEN:

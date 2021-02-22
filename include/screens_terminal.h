@@ -6,6 +6,7 @@
   Variables and Constants
 ---------------------------*/
 void terminal_printMenuScreen();
+void terminal_printHelpScreen();
 void terminal_printConfigScreen();
 void terminal_printPlayScreen();
 void terminal_printGameScreen(type_gameState gameScreenState);

@@ -8,6 +8,7 @@
 //App screens
 typedef enum {
   MENU_SCREEN = 0,
+  HELP_SCREEN,
   CONFIG_SCREEN,
 
   PLAY_SCREEN,
@@ -24,9 +25,24 @@ typedef enum {
   MENU_FIRST_VALUE = 0,
   MENU_PLAY,
   MENU_CONFIG,
+  MENU_HELP,
   MENU_EXIT,
   MENU_LAST_VALUE,
 } enum_menuScreenState;
+
+//Help options
+typedef enum {
+  HELP_FIRST_VALUE = 0,
+  HELP_RETURN,
+  HELP_LAST_VALUE,
+} enum_helpScreenState;
+
+//Config options
+typedef enum {
+  CONFIG_FIRST_VALUE = 0,
+  CONFIG_RETURN,
+  CONFIG_LAST_VALUE,
+} enum_configScreenState;
 
 //Play options
 typedef enum {
@@ -38,13 +54,6 @@ typedef enum {
   PLAY_RETURN,
   PLAY_LAST_VALUE,
 } enum_playScreenState;
-
-//Config options
-typedef enum {
-  CONFIG_FIRST_VALUE = 0,
-  CONFIG_RETURN,
-  CONFIG_LAST_VALUE,
-} enum_configScreenState;
 
 //Online options
 typedef enum {
@@ -73,6 +82,7 @@ typedef enum {
 typedef struct {
   enum_screens currentScreen;
   enum_menuScreenState menuScreenState;
+  enum_helpScreenState helpScreenState;
   enum_configScreenState configScreenState;
   enum_playScreenState playScreenState;
   enum_playScreenState onlineScreenState;
