@@ -17,6 +17,8 @@
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
+#include <pthread.h>
+#include <windows.h>
 #include "creact.h"
 
 //Constants

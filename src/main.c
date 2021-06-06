@@ -16,21 +16,20 @@
  * Loop principal da aplicação
  *----------------------------------------------------------------------------*/
 int main(){
-  //Definição estrutura principal, gameState
+  pthread_t tId;
   appState_t appState = getDefaultAppState();
 
-  //Mantem rodando enquanto o appStatus for STATUS_RUNNING
-  do{
-    //Printa tela com base no appState
-    printAppState(&appState);
+  pthread_create(&tId, NULL, screenThread, (void *)&tId);
 
-    //Captura ação do usuario e salva em gameState.userAction
+  do{
+    updateScreenState(&appState);
+    appState.screen.lastScreen = appState.screen.currentScreen;
+    appState.screen.forceClear = FALSE;
+
     captureUserAction(&appState);
 
-    //Retorna um novo appState com base na ação do usuario
     handleUserAction(&appState);
   } while(appState.appStatus == STATUS_RUNNING);
 
-  //Retorna appStatus
   return appState.appStatus;
 }

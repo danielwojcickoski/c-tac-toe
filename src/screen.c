@@ -10,7 +10,12 @@
 #include "../includes/screen.h"
 #include "../includes/screen_components.h"
 #include "../includes/logo.h"
-#include "windows.h"
+
+/*------------------------------------------------------------------------------
+ * Thread control variables
+ *----------------------------------------------------------------------------*/
+bool screenIsUpdated = FALSE;
+appState_t screenState = {0};
 
 /*------------------------------------------------------------------------------
  * Altera o estado do cursor entre visivel e invisivel
@@ -75,51 +80,57 @@ void screen_endGame(appState_t * currentAppState){
 }
 
 /*------------------------------------------------------------------------------
- * Printa a tela atual com base no "currentAppState"
+ * Updates the variables used in the thread to print the screen
  *----------------------------------------------------------------------------*/
-void printAppState(appState_t * currentAppState){
-  //Seta as cores para as default
-  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+void updateScreenState(appState_t * newScreenState){
+  screenState = *newScreenState;
+  screenIsUpdated = FALSE;
+}
 
-  //Esconde o cursos da tela
-  setCursor(CURSOR_HIDDEN);
+/*------------------------------------------------------------------------------
+ * Thread responsible for showing the components on the screen
+ *----------------------------------------------------------------------------*/
+void *screenThread(){
+  while(TRUE){
+    if(screenIsUpdated == FALSE){
+      SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+      setCursor(CURSOR_HIDDEN);
+      SetConsoleTitleW(DEFAULT_SCREEN_TITLE);
+      configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
 
-  //Seta o titulo do terminal
-  SetConsoleTitleW(DEFAULT_SCREEN_TITLE);
+      if(screenState.screen.lastScreen == SCREEN_NONE){
+        configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
+        cr_clearScreen();
+      }
 
-  //Isso faz o terminal ficar correta após a inicialização do app
-  if(currentAppState->screen.lastScreen == SCREEN_NONE){
-    configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
-    cr_clearScreen();
-  }
+      if(screenState.screen.lastScreen != screenState.screen.currentScreen || screenState.screen.forceClear == TRUE){
+        cr_clearScreen();
+      }
 
-  //Ajusta o tamanho do buffer do terminal
-  configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
+      //Mostra a tela correta relativa a currentScreen
+      switch (screenState.screen.currentScreen){
+        case SCREEN_MENU:
+          screen_mainMenu(screenState);
+          break;
 
-  //Limpa a tela se a tela mudou ou caso a flag esteja ativa
-  if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen ||
-     currentAppState->screen.forceClear == TRUE){
-    cr_clearScreen();
-    currentAppState->screen.forceClear = FALSE;
-  }
+        case SCREEN_GAME:
+          screen_inGame(&screenState);
+          break;
 
-  //Mostra a tela correta relativa a currentScreen
-  switch (currentAppState->screen.currentScreen){
-    case SCREEN_MENU:
-      screen_mainMenu(*currentAppState);
-      break;
+        case SCREEN_ENDGAME:
+          screen_endGame(&screenState);
+          setCursor(CURSOR_VISIBLE);
+          break;
 
-    case SCREEN_GAME:
-      screen_inGame(currentAppState);
-      break;
+        default:
+          screenState.screen.currentScreen = SCREEN_MENU;
+          break;
+      }
 
-    case SCREEN_ENDGAME:
-      screen_endGame(currentAppState);
-      setCursor(CURSOR_VISIBLE);
-      break;
+      screenIsUpdated = TRUE;
+    }
 
-    default:
-      currentAppState->screen.currentScreen = SCREEN_MENU;
-      break;
+    Sleep(16);
   }
 }
+

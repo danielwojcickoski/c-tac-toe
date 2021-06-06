@@ -14,6 +14,7 @@
 #include "../includes/main.h"
 
 //Functions
-void printAppState(appState_t * currentAppState);
+void updateScreenState(appState_t * newScreenState);
+void *screenThread();
 
 #endif  /*SCREEN_H*/
