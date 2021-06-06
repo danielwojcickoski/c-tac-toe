@@ -43,7 +43,7 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
   int placeholderSize = strlen(placeholder);
   int numberOfSpaces = WIDTH_BUTTON_MENU - placeholderSize - WIDTH_MENU_SELECTOR;
 
-  gotoxy(posX, posY);
+  cr_moveCursorXY(posX, posY);
 
   for(int count = 0; count < numberOfSpaces + 3; count++)
     selection[count] = ' ';

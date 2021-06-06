@@ -90,7 +90,7 @@ void printAppState(appState_t * currentAppState){
   //Isso faz o terminal ficar correta após a inicialização do app
   if(currentAppState->screen.lastScreen == SCREEN_NONE){
     configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
-    clrscr();
+    cr_clearScreen();
   }
 
   //Ajusta o tamanho do buffer do terminal
@@ -99,7 +99,7 @@ void printAppState(appState_t * currentAppState){
   //Limpa a tela se a tela mudou ou caso a flag esteja ativa
   if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen ||
      currentAppState->screen.forceClear == TRUE){
-    clrscr();
+    cr_clearScreen();
     currentAppState->screen.forceClear = FALSE;
   }
 

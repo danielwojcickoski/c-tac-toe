@@ -17,7 +17,7 @@
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
-#include "./conio2.h" //gotoxy, textcolor, textbackground
+#include "creact.h"
 
 //Constants
 #define FALSE 0
@@ -45,9 +45,7 @@
 typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
 
 //Macros
-#define SET_COLOR(BG, TEXT) \
-  textbackground(BG); \
-  textcolor(TEXT);
+#define SET_COLOR(BG, TEXT) cr_setColors(BG, TEXT); 
 
 //Enums
 typedef enum appStatus {

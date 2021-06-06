@@ -10,7 +10,7 @@
 
 #Program version
 V_MAJOR=2
-V_MINOR=0
+V_MINOR=1
 V_PATCH=0
 VERSION=-D V_MAJOR=$(V_MAJOR) -D V_MINOR=$(V_MINOR) -D V_PATCH=$(V_PATCH)
 #Compiler
@@ -38,7 +38,7 @@ FLAGS= -g -Wall
 RC_FLAGS=-O coff -o
 #Project libs
 #Examples: -lconio -lpthread
-LIB_FLAGS=-lconio
+LIB_FLAGS=
 #Libs to link with the compiler
 LIBS= -lm -L$(LIB) $(LIB_FLAGS)
 
